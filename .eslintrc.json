@@ -1,3 +1,27 @@
 {
-  "extends": "next/core-web-vitals"
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:unicorn/recommended",
+    "next",
+    "next/core-web-vitals",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "unicorn", "prettier"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-var-requires": "warn",
+    "no-duplicate-imports": "error",
+    "no-warning-comments": "warn",
+    "prettier/prettier": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "unicorn/filename-case": "off",
+    "unicorn/prevent-abbreviations": "warn",
+    "unicorn/no-null": "warn",
+    "unicorn/no-useless-undefined": ["error", { "checkArguments": false }],
+    "arrow-body-style": ["error", "as-needed", {
+      "requireReturnForObjectLiteral": false
+    }]
+  }
 }
