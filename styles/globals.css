@@ -1,3 +1,12 @@
+:root {
+  --color-green: #137974;
+  --color-green-light: #B9D7D5;
+  --color-offwhite: #F7F6FD;
+  --color-grey: #777676;
+  --color-dark: #141414;
+  --color-white: #FFFFFF;
+}
+
 html,
 body {
   padding: 0;

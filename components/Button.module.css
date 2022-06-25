@@ -1,0 +1,16 @@
+.button {
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  display: block;
+  cursor: pointer;
+}
+
+.primary {
+    background: var(--color-green);
+  color: var(--color-white);
+}
+
+.primary:is(:hover, :active) {
+  box-shadow: 0 2px 4px var(--color-green);
+}
