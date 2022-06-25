@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev:next": "next dev -p 8000",
     "build": "next build",
     "start": "next start",
     "storybook": "start-storybook -p 6006",
+    "dev": "yarn generate && run-p dev:next dev:storybook",
     "build-storybook": "build-storybook",
     "lint:eslint": "next lint",
     "lint:styles": "stylelint **/*.css",
