@@ -7,10 +7,34 @@
 }
 
 .primary {
-    background: var(--color-green);
+  background: var(--color-green);
   color: var(--color-white);
+  transition: box-shadow 0.25 ease;
 }
 
 .primary:is(:hover, :active) {
   box-shadow: 0 2px 4px var(--color-green);
+}
+
+.secondary {
+  background: var(--color-white);
+  color: var(--color-dark);
+  box-shadow: 0 0 6px 3px var(--color-offwhite);
+  transition: box-shadow 0.25 ease;
+}
+
+.secondary:is(:hover, :active) {
+  box-shadow: 0 2px 8px 4px var(--color-offwhite);
+}
+
+.outline {
+  background: transparent;
+  color: var(--color-green);
+  border-color: var(--color-green);
+  transition: color 0.25s, background-color 0.25s;
+}
+
+.outline:is(:hover, :active) {
+  background: var(--color-green);
+  color: var(--color-white);
 }

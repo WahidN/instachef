@@ -16,3 +16,17 @@ export const Primary = Template.bind({});
 Primary.args = {
   label: 'Log in'
 };
+
+export const Secondary = Template.bind({});
+Secondary.args = {
+  label: 'Log in',
+  secondary: true,
+};
+
+export const Outline = Template.bind({});
+Outline.args = {
+  label: 'Log in',
+  outline: true,
+};
+
+
