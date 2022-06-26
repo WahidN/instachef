@@ -3,7 +3,7 @@ import styles from './Button.module.css';
 
 interface Properties {
   label: string;
-  onClick: MouseEventHandler;
+  onClick?: MouseEventHandler;
   secondary?: boolean;
   outline?: boolean;
 }
