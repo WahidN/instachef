@@ -1,0 +1,51 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  max-width: 500px;
+}
+
+.input {
+  display: flex;
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: var(--color-white);
+  color: var(--color-dark);
+  border: 1px solid transparent;
+  box-shadow: 0 0 6px 4px var(--color-offwhite);
+}
+
+input.input:is(:active, :focus) {
+  border-color: var(--color-green);
+  outline: none;
+}
+
+input.input:disabled {
+  background-color: var(--color-grey-light);
+  cursor: not-allowed;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+  padding: 0 1rem;
+  color: var(--color-grey);
+}
+
+.required {
+  position: absolute;
+  right: 1rem;
+  font-size: 0.75rem;
+  color: var(--color-grey);
+  top: 1rem;
+}
+
+.error {
+  margin-top: .75rem;
+  display: block;
+  padding: 0 1rem;
+  color: darkred;
+}
+
+.inputError {
+  border-color: darkred;
+}
