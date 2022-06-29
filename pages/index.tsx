@@ -1,14 +1,15 @@
 import type { NextPage } from 'next'
-import { Button } from '../components/Button';
 import { Container } from '../components/Container'
+import { Form } from '../components/Form';
 import { Input } from '../components/Input'
 
 const Home: NextPage = () => {
   return (
     <Container>
-      <Input type="email" label="E-mail" required></Input>
-      <Input type="password" label="Password" required></Input>
-      <Button label='Log in'></Button>
+      <Form buttonLabel='Log in'>
+        <Input type="email" label="E-mail" required></Input>
+        <Input type="password" label="Password" required></Input>
+      </Form>
     </Container>
   );
 }

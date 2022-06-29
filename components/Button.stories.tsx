@@ -9,23 +9,23 @@ export default {
 } as ComponentMeta<typeof Button>;
 
 const Template: ComponentStory<typeof Button> = (args) => (
-  <Button {...args} />
+  <Button>{args.children}</Button>
 );
 
 export const Primary = Template.bind({});
 Primary.args = {
-  label: 'Log in'
+  children: 'Log in'
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: 'Log in',
+  children: 'Log in',
   secondary: true,
 };
 
 export const Outline = Template.bind({});
 Outline.args = {
-  label: 'Log in',
+  children: 'Log in',
   outline: true,
 };
 
