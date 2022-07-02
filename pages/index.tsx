@@ -1,12 +1,8 @@
 import type { NextPage } from 'next'
-import { Container } from '../components/Container'
-import { LoginForm } from '../components/forms/LoginForm';
 
 const Home: NextPage = () => {
   return (
-    <Container>
-      <LoginForm />
-    </Container>
+   <h1>Hello</h1>
   );
 }
 
