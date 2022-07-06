@@ -9,9 +9,7 @@ export default {
   args: {},
 } as ComponentMeta<typeof Loader>;
 
-const Template: ComponentStory<typeof Loader> = () => (
-  <Loader />
-);
+const Template: ComponentStory<typeof Loader> = () => <Loader />;
 
 export const Story = Template.bind({});
 Story.args = {};

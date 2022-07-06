@@ -9,11 +9,19 @@ interface Properties {
   outline?: boolean;
 }
 
-export const Button = ({children, onClick, outline, secondary, type = 'button'}: Properties) => {
-  const classStyles = useMemo(() => outline ? `${styles.outline} ${styles.button}` : secondary ? `${styles.secondary} ${styles.button}` : `${styles.button} ${styles.primary}`, [])
+export const Button = ({ children, onClick, outline, secondary, type = 'button' }: Properties) => {
+  const classStyles = useMemo(
+    () =>
+      outline
+        ? `${styles.outline} ${styles.button}`
+        : secondary
+        ? `${styles.secondary} ${styles.button}`
+        : `${styles.button} ${styles.primary}`,
+    [secondary, outline]
+  );
   return (
     <button type={type} className={classStyles} onClick={onClick}>
       {children}
     </button>
   );
-}
+};

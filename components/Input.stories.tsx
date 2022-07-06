@@ -6,13 +6,10 @@ import { Input } from './Input';
 export default {
   title: 'Input',
   component: Input,
-  args: {
-  },
+  args: {},
 } as ComponentMeta<typeof Input>;
 
-const Template: ComponentStory<typeof Input> = (args) => (
-  <Input {...args} />
-);
+const Template: ComponentStory<typeof Input> = (args) => <Input {...args} />;
 
 export const Email = Template.bind({});
 Email.args = {

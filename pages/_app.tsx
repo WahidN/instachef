@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
 import ProtectedRoute from '../components/ProtectedRoutes';
 import { AuthProvider } from '../providers/AuthProvider';
-import '../styles/globals.css'
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (
@@ -13,4 +13,4 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   );
 }
 
-export default MyApp
+export default MyApp;

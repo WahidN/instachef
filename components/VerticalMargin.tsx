@@ -6,10 +6,8 @@ interface Properties {
   size: 'small' | 'big';
 }
 
-export const VerticalMargin = ({children, size}: Properties) => {
-  const classNames = useMemo(() => size === 'small' ? styles.small : styles.big, [size]);
+export const VerticalMargin = ({ children, size }: Properties) => {
+  const classNames = useMemo(() => (size === 'small' ? styles.small : styles.big), [size]);
 
-  return (
-    <div className={classNames}>{children}</div>
-  )
-}
+  return <div className={classNames}>{children}</div>;
+};
