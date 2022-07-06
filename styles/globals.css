@@ -19,10 +19,25 @@ body {
 }
 
 a {
-  color: inherit;
+  color: var(--color-green);
   text-decoration: none;
 }
 
 * {
   box-sizing: border-box;
+}
+
+.textSmall {
+  font-size: .75rem;
+}
+
+.textCenter {
+  display: block;
+  text-align: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
