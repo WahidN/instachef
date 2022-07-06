@@ -18,11 +18,11 @@ export const LoginForm = () => {
     if (user) {
       router.push('/');
     }
-  }, [user]);
+  }, [user, signInWithGoogle, router]);
 
   return (
     <>
-      <div className='center'>
+      <div className="center">
         <Logo />
       </div>
       <h1 className="textCenter">Log in</h1>

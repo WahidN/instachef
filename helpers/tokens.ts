@@ -10,11 +10,11 @@ export const getTokens = () => {
   return { accessToken: accessToken || undefined, refreshToken: refreshToken || undefined };
 };
 
-export const saveTokens = (accessToken: string | undefined, refreshToken: string) => {
+export const saveTokens = (accessToken: string | undefined, refreshToken: string | null) => {
   if (typeof window === 'undefined') return;
 
   window.localStorage.setItem(ACCESS_TOKEN_LOCAL_STORAGE_KEY, accessToken || '');
-  window.localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY, refreshToken);
+  window.localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY, refreshToken || '');
 
   return { accessToken: accessToken || undefined, refreshToken: refreshToken || undefined };
 };
