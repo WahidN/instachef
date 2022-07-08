@@ -15,6 +15,7 @@ export const LoginForm = () => {
 
   const loginWithGoogle = useCallback(async () => {
     await signInWithGoogle();
+    console.log(user);
     if (user) {
       router.push('/');
     }
