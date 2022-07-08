@@ -20,7 +20,7 @@ const ProtectedRoute = ({ router, children }: Properties) => {
   if (loading) {
     return <Loader />;
   }
-  
+
   const pathIsProtected = !unprotectedRoutes.includes(router.pathname);
 
   if (isBrowser() && !user && pathIsProtected) {
