@@ -21,7 +21,6 @@ const ProtectedRoute = ({ router, children }: Properties): JSX.Element => {
 
   if (isBrowser() && !user && pathIsProtected) {
     router.push(appRoutes.LOGIN_PAGE);
-    return <></>;
   }
 
   return shouldShowLoader ? <Loader /> : <>{children}</>;
