@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useCallback } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { appRoutes } from '../../utils/routes';
@@ -10,16 +9,11 @@ import Logo from '../Logo';
 import { VerticalMargin } from '../VerticalMargin';
 
 export const LoginForm = () => {
-  const { user, signInWithGoogle } = useAuth();
-  const router = useRouter();
+  const { signInWithGoogle } = useAuth();
 
   const loginWithGoogle = useCallback(async () => {
     await signInWithGoogle();
-    console.log(user);
-    if (user) {
-      router.push('/');
-    }
-  }, [user, signInWithGoogle, router]);
+  }, [signInWithGoogle]);
 
   return (
     <>

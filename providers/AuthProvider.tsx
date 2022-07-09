@@ -1,7 +1,8 @@
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { getAuth, signInWithPopup, GoogleAuthProvider, User, onAuthStateChanged, signOut } from 'firebase/auth';
-import { removeTokens, saveTokens } from '../helpers/tokens';
+import { GoogleAuthProvider, User, signOut, signInWithRedirect, getRedirectResult } from 'firebase/auth';
+import { removeTokens } from '../helpers/tokens';
 import { auth } from '../firebase.config';
+import { useRouter } from 'next/router';
 export interface AuthContextType {
   // isLoadingUser: boolean;
   // login: (values: any) => Promise<void>; //@TODO fix type
@@ -22,7 +23,7 @@ const initialState = {
     // init
   },
   user: null,
-  loading: false,
+  loading: true,
 };
 
 const AuthContext = createContext<AuthContextType>(initialState);
@@ -32,29 +33,30 @@ interface Properties {
 }
 
 export const AuthProvider = ({ children }: Properties) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(initialState.user);
+  const [loading, setLoading] = useState<boolean>(initialState.loading);
+  const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      if (authUser) {
-        const token = await authUser?.getIdToken();
+    const initAuth = async () => {
+      setLoading(true);
+      const result = await getRedirectResult(auth);
+      if (result) {
+        // This is the signed-in user
+        const authUser = result.user;
         setUser(authUser);
-        saveTokens(token, null);
-      } else {
-        setUser(null);
+        router.push('/');
       }
-    });
-    setLoading(false);
-    return () => unsubscribe();
-  });
+      setLoading(false);
+    };
+
+    initAuth();
+  }, [router]);
 
   const signInWithGoogle = useCallback(async () => {
-    setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      setLoading(false);
+      await signInWithRedirect(auth, provider);
     } catch (error) {
       console.log(error);
       setLoading(false);

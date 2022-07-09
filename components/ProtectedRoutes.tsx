@@ -1,5 +1,5 @@
 import { NextRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { useAuth } from '../providers/AuthProvider';
 import { appRoutes } from '../utils/routes';
 import { Loader } from './Loader';
@@ -14,20 +14,16 @@ interface Properties {
 const ProtectedRoute = ({ router, children }: Properties) => {
   //Identify authenticated user
   const { user, loading } = useAuth();
+  const shouldShowLoader = useMemo(() => loading && !user, [loading, user]);
 
   const unprotectedRoutes = [appRoutes.LOGIN_PAGE, appRoutes.REGISTER_PAGE];
-
-  if (loading) {
-    return <Loader />;
-  }
-
   const pathIsProtected = !unprotectedRoutes.includes(router.pathname);
 
   if (isBrowser() && !user && pathIsProtected) {
     router.push(appRoutes.LOGIN_PAGE);
   }
 
-  return <>{children}</>;
+  return shouldShowLoader ? <Loader /> : children;
 };
 
 export default ProtectedRoute;
