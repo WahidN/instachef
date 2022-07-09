@@ -8,10 +8,10 @@ const isBrowser = () => typeof window !== 'undefined';
 
 interface Properties {
   router: NextRouter;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
-const ProtectedRoute = ({ router, children }: Properties) => {
+const ProtectedRoute = ({ router, children }: Properties): JSX.Element => {
   //Identify authenticated user
   const { user, loading } = useAuth();
   const shouldShowLoader = useMemo(() => loading && !user, [loading, user]);
@@ -21,9 +21,10 @@ const ProtectedRoute = ({ router, children }: Properties) => {
 
   if (isBrowser() && !user && pathIsProtected) {
     router.push(appRoutes.LOGIN_PAGE);
+    return <></>;
   }
 
-  return shouldShowLoader ? <Loader /> : children;
+  return shouldShowLoader ? <Loader /> : <>{children}</>;
 };
 
 export default ProtectedRoute;

@@ -10,11 +10,11 @@
   ],
   "plugins": ["@typescript-eslint", "unicorn", "prettier"],
   "rules": {
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-var-requires": "warn",
     "no-duplicate-imports": "error",
     "no-warning-comments": "warn",
-    "prettier/prettier": "error",
+    "prettier/prettier": "warn",
     "react-hooks/exhaustive-deps": "error",
     "unicorn/filename-case": "off",
     "unicorn/prevent-abbreviations": "warn",
