@@ -7,14 +7,17 @@ import {
   getRedirectResult,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
 } from 'firebase/auth';
 import { removeTokens, saveTokens } from '../helpers/tokens';
 import { auth } from '../firebase.config';
+import { errorMessage, getErrorMessage } from '../helpers/errorCodes';
 export interface AuthContextType {
   // login: (values: any) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
-  createUser: (email: string, password: string) => Promise<void>;
+  createUser: ({ email, password }: { email: string; password: string }) => Promise<User | null>;
   logout: () => void;
+  authErrors: string | null;
   user?: User | null; //@TODO fix type
   loading: boolean;
 }
@@ -28,11 +31,12 @@ const initialState = {
   signInWithGoogle: async () => {
     // init
   },
-  createUser: async () => {
-    // init
+  createUser: () => {
+    //
   },
   user: null,
   loading: true,
+  authErrors: null,
 };
 
 const AuthContext = createContext<AuthContextType>(initialState);
@@ -44,6 +48,7 @@ interface Properties {
 export const AuthProvider = ({ children }: Properties) => {
   const [user, setUser] = useState<User | null>(initialState.user);
   const [loading, setLoading] = useState<boolean>(initialState.loading);
+  const [authErrors, setAuthErrors] = useState<string | null>(initialState.authErrors);
 
   useEffect(() => {
     onAuthStateChanged(auth, (authUser) => {
@@ -67,7 +72,7 @@ export const AuthProvider = ({ children }: Properties) => {
           saveTokens(token, null);
         }
       } catch (error) {
-        alert(error);
+        setAuthErrors(getErrorMessage(error.code));
         setLoading(false);
       }
       setLoading(false);
@@ -81,7 +86,7 @@ export const AuthProvider = ({ children }: Properties) => {
       const provider = new GoogleAuthProvider();
       await signInWithRedirect(auth, provider);
     } catch (error) {
-      console.log(error);
+      setAuthErrors(getErrorMessage(error.code));
       setLoading(false);
     }
   }, []);
@@ -92,16 +97,26 @@ export const AuthProvider = ({ children }: Properties) => {
     await signOut(auth);
   }, []);
 
-  const createUser = useCallback(async (email: string, password: string) => {
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  const createUser = useCallback(
+    async ({ email, password }: { email: string; password: string }): Promise<User | null> => {
+      try {
+        const newUser = await createUserWithEmailAndPassword(auth, email, password);
+        if (newUser) {
+          console.log(newUser)
+          await sendEmailVerification(newUser.user);
+        }
+        return newUser.user;
+      } catch (error) {
+        console.log(error);
+        setAuthErrors(getErrorMessage(error.code));
+        return null;
+      }
+    },
+    []
+  );
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, createUser, logout, loading }}>
+    <AuthContext.Provider value={{ user, signInWithGoogle, createUser, logout, loading, authErrors }}>
       {children}
     </AuthContext.Provider>
   );

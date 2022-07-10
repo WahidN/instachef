@@ -31,6 +31,10 @@ a {
   font-size: .75rem;
 }
 
+.textError {
+  color: darkred;
+}
+
 .textCenter {
   display: block;
   text-align: center;
