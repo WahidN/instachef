@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { appRoutes } from '../../utils/routes';
 import { Button } from '../Button';
+import { Container } from '../Container';
 import { Form } from '../Form';
 import { Input } from '../Input';
 import Logo from '../Logo';
@@ -16,7 +17,7 @@ export const LoginForm = () => {
   }, [signInWithGoogle]);
 
   return (
-    <>
+    <Container>
       <div className="center">
         <Logo />
       </div>
@@ -38,6 +39,6 @@ export const LoginForm = () => {
       <Button onClick={loginWithGoogle} secondary>
         Google
       </Button>
-    </>
+    </Container>
   );
 };

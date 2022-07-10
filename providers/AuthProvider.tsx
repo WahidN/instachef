@@ -1,25 +1,36 @@
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { GoogleAuthProvider, User, signOut, signInWithRedirect, getRedirectResult } from 'firebase/auth';
-import { removeTokens } from '../helpers/tokens';
+import {
+  GoogleAuthProvider,
+  User,
+  signOut,
+  signInWithRedirect,
+  getRedirectResult,
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+} from 'firebase/auth';
+import { getTokens, removeTokens, saveTokens } from '../helpers/tokens';
 import { auth } from '../firebase.config';
 import { useRouter } from 'next/router';
 export interface AuthContextType {
-  // isLoadingUser: boolean;
   // login: (values: any) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
+  createUser: (email: string, password: string) => Promise<void>;
   logout: () => void;
   user?: User | null; //@TODO fix type
   loading: boolean;
 }
 
 const initialState = {
-  // isLoadingUser: true,
   // // eslint-disable-next-line unicorn/no-useless-undefined
   // login: async () => undefined,
   logout: async () => {
     // init
   },
   signInWithGoogle: async () => {
+    // init
+  },
+  createUser: async () => {
     // init
   },
   user: null,
@@ -38,14 +49,30 @@ export const AuthProvider = ({ children }: Properties) => {
   const router = useRouter();
 
   useEffect(() => {
-    const initAuth = async () => {
-      setLoading(true);
-      const result = await getRedirectResult(auth);
-      if (result) {
-        // This is the signed-in user
-        const authUser = result.user;
+    onAuthStateChanged(auth, (authUser) => {
+      if (authUser) {
         setUser(authUser);
-        router.push('/');
+        setLoading(false);
+        return;
+      }
+    });
+
+    const initAuth = async () => {
+      try {
+        setLoading(true);
+        const result = await getRedirectResult(auth);
+        if (result) {
+          // This is the signed-in user
+          const authUser = result.user;
+          setUser(authUser);
+          router.push('/');
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential?.accessToken;
+          saveTokens(token, null);
+        }
+      } catch (error) {
+        alert(error);
+        setLoading(false);
       }
       setLoading(false);
     };
@@ -69,7 +96,19 @@ export const AuthProvider = ({ children }: Properties) => {
     await signOut(auth);
   }, []);
 
-  return <AuthContext.Provider value={{ user, signInWithGoogle, logout, loading }}>{children}</AuthContext.Provider>;
+  const createUser = useCallback(async (email: string, password: string) => {
+    try {
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ user, signInWithGoogle, createUser, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);
