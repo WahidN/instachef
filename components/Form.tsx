@@ -7,7 +7,7 @@ interface Properties {
   children: ReactNode;
   buttonLabel: string;
   isLoading?: boolean;
-  fieldErrors: string | null;
+  fieldErrors?: string | null;
   onSubmit?: FormEventHandler<HTMLFormElement>;
 }
 

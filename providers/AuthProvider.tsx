@@ -11,11 +11,12 @@ import {
 } from 'firebase/auth';
 import { removeTokens, saveTokens } from '../helpers/tokens';
 import { auth } from '../firebase.config';
-import { errorMessage, getErrorMessage } from '../helpers/errorCodes';
+import { getErrorMessage } from '../helpers/errorCodes';
+import { FirebaseError } from 'firebase/app';
 export interface AuthContextType {
   // login: (values: any) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
-  createUser: ({ email, password }: { email: string; password: string }) => Promise<User | null>;
+  createUser: ({ email, password }: { email: string; password: string }) => Promise<User | null> | undefined;
   logout: () => void;
   authErrors: string | null;
   user?: User | null; //@TODO fix type
@@ -31,9 +32,7 @@ const initialState = {
   signInWithGoogle: async () => {
     // init
   },
-  createUser: () => {
-    //
-  },
+  createUser: async ({ email, password }: { email: string; password: string }) => null,
   user: null,
   loading: true,
   authErrors: null,
@@ -72,7 +71,9 @@ export const AuthProvider = ({ children }: Properties) => {
           saveTokens(token, null);
         }
       } catch (error) {
-        setAuthErrors(getErrorMessage(error.code));
+        if (error instanceof FirebaseError) {
+          setAuthErrors(getErrorMessage(error.code));
+        }
         setLoading(false);
       }
       setLoading(false);
@@ -86,7 +87,9 @@ export const AuthProvider = ({ children }: Properties) => {
       const provider = new GoogleAuthProvider();
       await signInWithRedirect(auth, provider);
     } catch (error) {
-      setAuthErrors(getErrorMessage(error.code));
+      if (error instanceof FirebaseError) {
+        setAuthErrors(getErrorMessage(error.code));
+      }
       setLoading(false);
     }
   }, []);
@@ -102,13 +105,14 @@ export const AuthProvider = ({ children }: Properties) => {
       try {
         const newUser = await createUserWithEmailAndPassword(auth, email, password);
         if (newUser) {
-          console.log(newUser)
+          console.log(newUser);
           await sendEmailVerification(newUser.user);
         }
         return newUser.user;
       } catch (error) {
-        console.log(error);
-        setAuthErrors(getErrorMessage(error.code));
+        if (error instanceof FirebaseError) {
+          setAuthErrors(getErrorMessage(error.code));
+        }
         return null;
       }
     },
