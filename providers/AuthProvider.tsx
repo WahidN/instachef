@@ -6,12 +6,10 @@ import {
   signInWithRedirect,
   getRedirectResult,
   createUserWithEmailAndPassword,
-  getAuth,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getTokens, removeTokens, saveTokens } from '../helpers/tokens';
+import { removeTokens, saveTokens } from '../helpers/tokens';
 import { auth } from '../firebase.config';
-import { useRouter } from 'next/router';
 export interface AuthContextType {
   // login: (values: any) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
@@ -46,7 +44,6 @@ interface Properties {
 export const AuthProvider = ({ children }: Properties) => {
   const [user, setUser] = useState<User | null>(initialState.user);
   const [loading, setLoading] = useState<boolean>(initialState.loading);
-  const router = useRouter();
 
   useEffect(() => {
     onAuthStateChanged(auth, (authUser) => {
@@ -65,7 +62,6 @@ export const AuthProvider = ({ children }: Properties) => {
           // This is the signed-in user
           const authUser = result.user;
           setUser(authUser);
-          router.push('/');
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential?.accessToken;
           saveTokens(token, null);
@@ -78,7 +74,7 @@ export const AuthProvider = ({ children }: Properties) => {
     };
 
     initAuth();
-  }, [router]);
+  }, []);
 
   const signInWithGoogle = useCallback(async () => {
     try {
