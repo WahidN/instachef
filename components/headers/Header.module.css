@@ -1,0 +1,23 @@
+.header {
+  min-height: 90px;
+  display: flex;
+  width: 100%;
+  position: sticky;
+  top: 0;
+}
+
+.headerInner {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 1rem;
+}
+
+.headerWhite {
+  background: white;
+}
+
+.title {
+  font-weight: bold;
+}
