@@ -1,7 +1,3 @@
-import React from 'react'
+import React from 'react';
 
-export const DetailHeader = () => {
-  return (
-    <div>DetailHeader</div>
-  )
-}
+export const DetailHeader = () => <div>DetailHeader</div>;

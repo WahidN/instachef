@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function SearchHeader() {
-  return (
-    <div>SearchHeader</div>
-  )
+  return <div>SearchHeader</div>;
 }
