@@ -1,0 +1,14 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.formatOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "files.exclude": {
+    "**/node_modules": true,
+    ".next": true,
+    "out": true
+  },
+  "files.eol": "\n"
+}
