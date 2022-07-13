@@ -2,7 +2,9 @@
   padding: 1rem 2rem;
   border-radius: 1rem;
   border: 1px solid transparent;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   text-align: center;
   width: 100%;
@@ -40,4 +42,8 @@
 .outline:is(:hover, :active) {
   background: var(--color-green);
   color: var(--color-white);
+}
+
+.buttonIcon {
+  margin-right: .5rem;
 }

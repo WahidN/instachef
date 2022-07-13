@@ -36,7 +36,7 @@ export const LoginForm = () => {
       </Link>
 
       <p className="textSmall">Or continue with:</p>
-      <Button onClick={loginWithGoogle} secondary>
+      <Button icon='google' onClick={loginWithGoogle} secondary>
         Google
       </Button>
     </Container>
