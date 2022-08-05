@@ -3,7 +3,7 @@
   flex-direction: column;
   position: relative;
   max-width: 500px;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 .input {
@@ -28,9 +28,13 @@ input.input:disabled {
 }
 
 .label {
-  margin-bottom: 0.5rem;
-  padding: 0 1rem;
   color: var(--color-grey);
+  position: absolute;
+  top: -0.5rem;
+  font-size: .75rem;
+  left: 1rem;
+  line-height: 1.25;
+  transition: all .2s;
 }
 
 .required {
@@ -39,6 +43,19 @@ input.input:disabled {
   font-size: 0.75rem;
   color: var(--color-grey);
   top: 1.25rem;
+  display: none;
+}
+
+
+input.input:placeholder-shown + .label,
+input.input:-webkit-autofill + .label {
+  top: 1rem;
+  font-size: 1rem;
+}
+
+input.input:placeholder-shown ~ .required,
+input.input:-webkit-autofill ~ .required {
+  display: inline-block;
 }
 
 .error {

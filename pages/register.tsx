@@ -1,25 +1,28 @@
-import React, { useMemo, useState } from 'react';
+import { RegisterSuccess } from 'components/forms/RegisterSuccess';
+import { useRouter } from 'next/router';
+import { useMemo, useState } from 'react';
 import { Container } from '../components/Container';
 import { RegisterForm } from '../components/forms/RegisterForm';
 import { RegisterProfile } from '../components/forms/RegisterProfile';
 
 const Register = () => {
   const [step, setStep] = useState<number>(1);
-  
+  const router = useRouter();
+
   const component = useMemo(() => {
     switch (step) {
       case 1:
         return <RegisterForm onHandleStep={() => setStep(2)} />;
       case 2:
-        return <RegisterProfile />;
+        return <RegisterProfile onHandleStep={() => setStep(3)} />;
       case 3:
-        return <h1>Succes!</h1>;
+        return <RegisterSuccess onHandleStep={() => router.push('/')} />;
       default:
         return null;
     }
-  }, [step]);
+  }, [router, step]);
 
-  return <Container>{component}</Container>;
+  return <Container centerContent>{component}</Container>;
 };
 
 export default Register;

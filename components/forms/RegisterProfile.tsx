@@ -1,14 +1,21 @@
-import React from 'react';
+import { Button } from 'components/Button';
+import { Icon } from 'components/Icon';
 import { useAuth } from '../../providers/AuthProvider';
-import { Container } from '../Container';
 import { Input } from '../Input';
+import { ProfilePicture } from '../ProfilePicture';
+import { TextArea } from '../TextArea';
 
-export const RegisterProfile = () => {
+export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) => {
   const { user } = useAuth();
 
   return (
-    <Container>
-      <Input type="text" defaultValue={user?.displayName || undefined} label="Name" />
-    </Container>
+    <>
+      <ProfilePicture />
+      <Input type="text" defaultValue={user?.displayName || ''} label="Name" />
+      <TextArea label="Bio" defaultValue={user?.bio || ''} rows={5} />
+      <Button onClick={onHandleStep}>
+        <Icon type="arrowRight" />
+      </Button>
+    </>
   );
 };

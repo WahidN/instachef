@@ -1,25 +1,27 @@
-import React, { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { FirebaseError } from 'firebase/app';
 import {
-  GoogleAuthProvider,
-  User,
-  signOut,
-  signInWithRedirect,
-  getRedirectResult,
   createUserWithEmailAndPassword,
+  getRedirectResult,
+  GoogleAuthProvider,
   onAuthStateChanged,
   sendEmailVerification,
+  signInWithRedirect,
+  signOut,
 } from 'firebase/auth';
-import { removeTokens, saveTokens } from '../helpers/tokens';
+import { doc, setDoc } from 'firebase/firestore';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { UserModel } from '../components/models/User';
 import { auth } from '../firebase.config';
 import { getErrorMessage } from '../helpers/errorCodes';
-import { FirebaseError } from 'firebase/app';
+import { userCol } from '../helpers/firestore';
+import { removeTokens, saveTokens } from '../helpers/tokens';
 export interface AuthContextType {
   // login: (values: any) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
-  createUser: ({ email, password }: { email: string; password: string }) => Promise<User | null> | undefined;
+  createUser: ({ email, password }: { email: string; password: string }) => Promise<UserModel | null> | undefined;
   logout: () => void;
   authErrors: string | null;
-  user?: User | null; //@TODO fix type
+  user?: UserModel | null;
   loading: boolean;
 }
 
@@ -45,7 +47,7 @@ interface Properties {
 }
 
 export const AuthProvider = ({ children }: Properties) => {
-  const [user, setUser] = useState<User | null>(initialState.user);
+  const [user, setUser] = useState<UserModel | null>(initialState.user);
   const [loading, setLoading] = useState<boolean>(initialState.loading);
   const [authErrors, setAuthErrors] = useState<string | null>(initialState.authErrors);
 
@@ -65,18 +67,18 @@ export const AuthProvider = ({ children }: Properties) => {
         if (result) {
           // This is the signed-in user
           const authUser = result.user;
-          setUser(authUser);
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential?.accessToken;
           saveTokens(token, null);
+          setUserInDB(authUser.uid);
         }
       } catch (error) {
         if (error instanceof FirebaseError) {
           setAuthErrors(getErrorMessage(error.code));
         }
+      } finally {
         setLoading(false);
       }
-      setLoading(false);
     };
 
     initAuth();
@@ -90,7 +92,6 @@ export const AuthProvider = ({ children }: Properties) => {
       if (error instanceof FirebaseError) {
         setAuthErrors(getErrorMessage(error.code));
       }
-      setLoading(false);
     }
   }, []);
 
@@ -101,14 +102,28 @@ export const AuthProvider = ({ children }: Properties) => {
   }, []);
 
   const createUser = useCallback(
-    async ({ email, password }: { email: string; password: string }): Promise<User | null> => {
+    async ({ email, password }: { email: string; password: string }): Promise<UserModel | null> => {
       try {
         const newUser = await createUserWithEmailAndPassword(auth, email, password);
         if (newUser) {
-          console.log(newUser);
           await sendEmailVerification(newUser.user);
+          setUserInDB(newUser.user.uid);
+          const userModel = {
+            id: newUser.user.uid,
+            bio: '',
+            followers: [],
+            following: [],
+            likedPosts: [],
+            favorites: [],
+            email: newUser.user.email,
+            displayName: newUser.user.displayName,
+            emailVerified: newUser.user.emailVerified,
+            photoUrl: newUser.user.photoURL,
+          };
+          setUser(userModel);
+          return userModel;
         }
-        return newUser.user;
+        return null;
       } catch (error) {
         if (error instanceof FirebaseError) {
           setAuthErrors(getErrorMessage(error.code));
@@ -127,3 +142,15 @@ export const AuthProvider = ({ children }: Properties) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+const setUserInDB = async (userId: string) => {
+  const userReference = doc(userCol, `${userId}`);
+  await setDoc(userReference, {
+    id: userId,
+    bio: '',
+    followers: [],
+    following: [],
+    favorites: [],
+    likedPosts: [],
+  });
+};

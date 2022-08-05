@@ -3,3 +3,13 @@
   height: 100%;
   min-height: 100vh;
 }
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center > div {
+  width: 100%;
+}
