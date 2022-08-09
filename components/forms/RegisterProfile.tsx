@@ -12,7 +12,7 @@ export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) 
     <>
       <ProfilePicture />
       <Input type="text" defaultValue={user?.displayName || ''} label="Name" />
-      <TextArea label="Bio" defaultValue={user?.bio || ''} rows={5} />
+      <TextArea label="Bio" defaultValue={user?.bio || ''} />
       <Button onClick={onHandleStep}>
         <Icon type="arrowRight" />
       </Button>

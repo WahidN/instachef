@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   sendEmailVerification,
+  signInWithEmailAndPassword,
   signInWithRedirect,
   signOut,
 } from 'firebase/auth';
@@ -16,7 +17,7 @@ import { getErrorMessage } from '../helpers/errorCodes';
 import { userCol } from '../helpers/firestore';
 import { removeTokens, saveTokens } from '../helpers/tokens';
 export interface AuthContextType {
-  // login: (values: any) => Promise<void>; //@TODO fix type
+  login: (email: string, password: string) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
   createUser: ({ email, password }: { email: string; password: string }) => Promise<UserModel | null> | undefined;
   logout: () => void;
@@ -26,8 +27,9 @@ export interface AuthContextType {
 }
 
 const initialState = {
-  // // eslint-disable-next-line unicorn/no-useless-undefined
-  // login: async () => undefined,
+  login: async () => {
+    // init
+  },
   logout: async () => {
     // init
   },
@@ -84,6 +86,18 @@ export const AuthProvider = ({ children }: Properties) => {
     initAuth();
   }, []);
 
+  const login = async (email: string, password: string): Promise<void> => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        setUser(userCredential.user);
+      })
+      .catch((error) => {
+        if (error instanceof FirebaseError) {
+          setAuthErrors(getErrorMessage(error.code));
+        }
+      });
+  };
+
   const signInWithGoogle = useCallback(async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -135,7 +149,7 @@ export const AuthProvider = ({ children }: Properties) => {
   );
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, createUser, logout, loading, authErrors }}>
+    <AuthContext.Provider value={{ user, signInWithGoogle, createUser, logout, login, loading, authErrors }}>
       {children}
     </AuthContext.Provider>
   );

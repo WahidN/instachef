@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 import { useAuth } from '../../providers/AuthProvider';
 import { appRoutes } from '../../utils/routes';
 import { Button } from '../Button';
@@ -9,12 +10,26 @@ import { Input } from '../Input';
 import Logo from '../Logo';
 import { VerticalMargin } from '../VerticalMargin';
 
+type Inputs = {
+  email: string;
+  password: string;
+};
+
 export const LoginForm = () => {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, login, authErrors } = useAuth();
 
   const loginWithGoogle = useCallback(async () => {
     await signInWithGoogle();
   }, [signInWithGoogle]);
+
+  const loginNormal = useCallback(
+    (data: Inputs) => {
+      login(data.email, data.password);
+    },
+    [login]
+  );
+
+  const { register, handleSubmit } = useForm();
 
   return (
     <Container>
@@ -22,9 +37,9 @@ export const LoginForm = () => {
         <Logo />
       </div>
       <h1 className="textCenter">Log in</h1>
-      <Form buttonLabel="Log in">
-        <Input type="email" label="E-mail" required></Input>
-        <Input type="password" label="Password" required></Input>
+      <Form buttonLabel="Log in" onSubmit={handleSubmit(loginNormal)} fieldErrors={authErrors}>
+        <Input type="email" label="E-mail" required {...register('email')} />
+        <Input type="password" label="Password" required {...register('password')} />
         <VerticalMargin size="small">
           <Link href={appRoutes.REGISTER_PAGE}>
             <a className="textSmall textCenter">Forgot your password?</a>
