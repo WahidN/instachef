@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAuth } from '../../providers/AuthProvider';
 import { appRoutes } from '../../utils/routes';
 import { Button } from '../Button';
@@ -17,19 +17,18 @@ type Inputs = {
 
 export const LoginForm = () => {
   const { signInWithGoogle, login, authErrors } = useAuth();
+  const { register, handleSubmit } = useForm<Inputs>();
 
   const loginWithGoogle = useCallback(async () => {
     await signInWithGoogle();
   }, [signInWithGoogle]);
 
-  const loginNormal = useCallback(
+  const loginNormal: SubmitHandler<Inputs> = useCallback(
     (data: Inputs) => {
       login(data.email, data.password);
     },
     [login]
   );
-
-  const { register, handleSubmit } = useForm();
 
   return (
     <Container>
