@@ -1,12 +1,11 @@
+import { Button } from 'components/Button';
+import { Container } from 'components/Container';
+import { Layout } from 'components/_Layout';
 import type { NextPage } from 'next';
-import { useMemo } from 'react';
-import { Button } from '../components/Button';
-import { Layout } from '../components/_Layout';
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from 'providers/AuthProvider';
 
 const Home: NextPage = () => {
   const { user, logout } = useAuth();
-  const userName = useMemo(() => user?.displayName, [user]);
 
   return (
     <Layout
@@ -14,8 +13,10 @@ const Home: NextPage = () => {
         showLogo: true,
       }}
     >
-      <h1>Hello {userName}</h1>
-      <Button onClick={logout}>Log out</Button>
+      <Container>
+        <h1>Hello {user?.authUser?.displayName}</h1>
+        <Button onClick={logout}>Log out</Button>
+      </Container>
     </Layout>
   );
 };

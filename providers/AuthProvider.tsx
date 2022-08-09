@@ -8,14 +8,16 @@ import {
   signInWithEmailAndPassword,
   signInWithRedirect,
   signOut,
+  User,
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import { getErrorMessage } from 'helpers/errorCodes';
+import { userCol } from 'helpers/firestore';
+import { removeTokens, saveTokens } from 'helpers/tokens';
+import { UserModel } from 'models/User';
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { UserModel } from '../components/models/User';
 import { auth } from '../firebase.config';
-import { getErrorMessage } from '../helpers/errorCodes';
-import { userCol } from '../helpers/firestore';
-import { removeTokens, saveTokens } from '../helpers/tokens';
+
 export interface AuthContextType {
   login: (email: string, password: string) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
@@ -36,7 +38,10 @@ const initialState = {
   signInWithGoogle: async () => {
     // init
   },
-  createUser: async ({ email, password }: { email: string; password: string }) => null,
+  createUser: async () => null,
+  updateProfile: async (user: User) => {
+    // init
+  },
   user: null,
   loading: true,
   authErrors: null,
@@ -56,7 +61,8 @@ export const AuthProvider = ({ children }: Properties) => {
   useEffect(() => {
     onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
-        setUser(authUser);
+        const newUser = new UserModel(authUser.uid, authUser);
+        setUser(newUser);
         setLoading(false);
         return;
       }
@@ -89,7 +95,8 @@ export const AuthProvider = ({ children }: Properties) => {
   const login = async (email: string, password: string): Promise<void> => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setUser(userCredential.user);
+        const newUser = new UserModel(userCredential.user.uid, userCredential.user);
+        setUser(newUser);
       })
       .catch((error) => {
         if (error instanceof FirebaseError) {
@@ -122,20 +129,9 @@ export const AuthProvider = ({ children }: Properties) => {
         if (newUser) {
           await sendEmailVerification(newUser.user);
           setUserInDB(newUser.user.uid);
-          const userModel = {
-            id: newUser.user.uid,
-            bio: '',
-            followers: [],
-            following: [],
-            likedPosts: [],
-            favorites: [],
-            email: newUser.user.email,
-            displayName: newUser.user.displayName,
-            emailVerified: newUser.user.emailVerified,
-            photoUrl: newUser.user.photoURL,
-          };
-          setUser(userModel);
-          return userModel;
+          const user = new UserModel(newUser.user.uid, newUser.user);
+          setUser(user);
+          return user;
         }
         return null;
       } catch (error) {

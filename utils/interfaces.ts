@@ -7,3 +7,12 @@ export interface IHeader {
   buttonRight?: ReactNode;
   showLogo?: boolean;
 }
+
+export interface IUser {
+  id: string;
+  bio: string;
+  followers: string[];
+  following: string[];
+  likedPosts: string[];
+  favorites: string[];
+}

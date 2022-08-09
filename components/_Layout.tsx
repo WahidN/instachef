@@ -1,7 +1,7 @@
+import { Header } from 'components/headers/Header';
 import Head from 'next/head';
-import React, { ReactNode } from 'react';
-import { Header } from './headers/Header';
-import { IHeader } from './utils/interfaces';
+import { ReactNode } from 'react';
+import { IHeader } from 'utils/interfaces';
 
 const defaults = {
   title: 'InstaChef | Online social platform for chefs',

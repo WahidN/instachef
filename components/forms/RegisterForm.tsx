@@ -1,10 +1,10 @@
+import { Form } from 'components/Form';
+import { Input } from 'components/Input';
+import { VerticalMargin } from 'components/VerticalMargin';
 import Link from 'next/link';
-import React, { useCallback } from 'react';
+import { useAuth } from 'providers/AuthProvider';
+import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAuth } from '../../providers/AuthProvider';
-import { Form } from '../Form';
-import { Input } from '../Input';
-import { VerticalMargin } from '../VerticalMargin';
 
 interface Properties {
   onHandleStep: () => void;

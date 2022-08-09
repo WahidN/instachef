@@ -1,14 +1,14 @@
+import { Button } from 'components/Button';
+import { Container } from 'components/Container';
+import { Form } from 'components/Form';
+import { Input } from 'components/Input';
+import Logo from 'components/Logo';
+import { VerticalMargin } from 'components/VerticalMargin';
 import Link from 'next/link';
+import { useAuth } from 'providers/AuthProvider';
 import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAuth } from '../../providers/AuthProvider';
-import { appRoutes } from '../../utils/routes';
-import { Button } from '../Button';
-import { Container } from '../Container';
-import { Form } from '../Form';
-import { Input } from '../Input';
-import Logo from '../Logo';
-import { VerticalMargin } from '../VerticalMargin';
+import { appRoutes } from 'utils/routes';
 
 type Inputs = {
   email: string;

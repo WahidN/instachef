@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useAuth } from '../providers/AuthProvider';
+import { useAuth } from 'providers/AuthProvider';
 import styles from './ProfilePicture.module.css';
 
 interface Properties {
@@ -12,7 +12,9 @@ export const ProfilePicture = ({ onProfilePictureChange }: Properties) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.avatar}>
-        {user?.photoUrl ? <Image alt={user?.displayName || ''} src={user?.photoUrl} loading="lazy" /> : null}
+        {user?.authUser.photoURL ? (
+          <Image alt={user?.authUser?.displayName || ''} src={user?.authUser?.photoURL} loading="lazy" />
+        ) : null}
       </div>
       <div className={styles.profilePictureInput}>
         <label htmlFor="profilePicture">Choose profile picture</label>

@@ -1,9 +1,9 @@
+import { LoginForm } from 'components/forms/LoginForm';
+import { Loader } from 'components/Loader';
 import { NextRouter } from 'next/router';
+import { useAuth } from 'providers/AuthProvider';
 import { ReactNode, useMemo } from 'react';
-import { useAuth } from '../providers/AuthProvider';
-import { appRoutes } from '../utils/routes';
-import { LoginForm } from './forms/LoginForm';
-import { Loader } from './Loader';
+import { appRoutes } from 'utils/routes';
 
 const unprotectedRoutes = new Set([appRoutes.REGISTER_PAGE]);
 

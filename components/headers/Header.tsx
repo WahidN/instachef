@@ -1,9 +1,8 @@
-import React from 'react';
-import { IHeader } from '../utils/interfaces';
-import { DefaultHeader } from './DefaultHeader';
-import { DetailHeader } from './DetailHeader';
-import styles from './Header.module.css';
-import SearchHeader from './SearchHeader';
+import { DefaultHeader } from 'components/headers/DefaultHeader';
+import { DetailHeader } from 'components/headers/DetailHeader';
+import styles from 'components/headers/Header.module.css';
+import SearchHeader from 'components/headers/SearchHeader';
+import { IHeader } from 'utils/interfaces';
 
 export const Header = ({ type = 'default', title, showLogo, buttonLeft, buttonRight }: IHeader) => {
   const renderHeader = () => {
