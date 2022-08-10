@@ -6,13 +6,14 @@ interface Properties extends InputHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   classnames?: string;
   error?: string | FieldError;
+  rows?: number;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, Properties>(
-  ({ label, classnames, error, onChange, ...rest }, reference) => (
-    <div className={`${styles.textareaWrap} ${classnames}`}>
-      <textarea className={styles.textArea} {...rest} ref={reference} placeholder=" " />
+  ({ label, classnames, error, onChange, rows = 6, ...rest }, reference) => (
+    <div className={`${styles.textareaWrap} ${classnames ?? ''}`}>
+      <textarea className={styles.textArea} {...rest} ref={reference} placeholder=" " rows={rows} />
       <label className={styles.label} htmlFor="">
         {label}
       </label>

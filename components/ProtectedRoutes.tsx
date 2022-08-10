@@ -1,5 +1,4 @@
 import { LoginForm } from 'components/forms/LoginForm';
-import { Loader } from 'components/Loader';
 import { NextRouter } from 'next/router';
 import { useAuth } from 'providers/AuthProvider';
 import { ReactNode, useMemo } from 'react';
@@ -15,13 +14,9 @@ interface Properties {
 const ProtectedRoute = ({ children, router }: Properties): JSX.Element => {
   //Identify authenticated user
   const { user, loading } = useAuth();
-  const shouldShowLoader = useMemo(() => loading, [loading]);
-  const shouldShowLogin = useMemo(
-    () => !shouldShowLoader && !user && !unprotectedRoutes.has(router.pathname),
-    [router.pathname, shouldShowLoader, user]
-  );
+  const shouldShowLogin = useMemo(() => !user && !unprotectedRoutes.has(router.pathname), [router.pathname, user]);
 
-  return shouldShowLoader ? <Loader /> : shouldShowLogin ? <LoginForm /> : <>{children}</>;
+  return shouldShowLogin ? <LoginForm /> : <>{children}</>;
 };
 
 export default ProtectedRoute;

@@ -1,6 +1,7 @@
-import React, { MouseEventHandler, ReactNode, useMemo } from 'react';
+import { MouseEventHandler, ReactNode, useMemo } from 'react';
 import styles from './Button.module.css';
 import { Icon, IconType } from './Icon';
+import { Loader } from './Loader';
 
 interface Properties {
   children: ReactNode;
@@ -9,9 +10,10 @@ interface Properties {
   onClick?: MouseEventHandler;
   secondary?: boolean;
   outline?: boolean;
+  isLoading?: boolean;
 }
 
-export const Button = ({ children, onClick, outline, icon, secondary, type = 'button' }: Properties) => {
+export const Button = ({ children, onClick, outline, icon, secondary, type = 'button', isLoading }: Properties) => {
   const classStyles = useMemo(
     () =>
       outline
@@ -23,8 +25,14 @@ export const Button = ({ children, onClick, outline, icon, secondary, type = 'bu
   );
   return (
     <button type={type} className={classStyles} onClick={onClick}>
-      {icon && <Icon classes={styles.buttonIcon} type={icon} />}
-      {children}
+      {isLoading ? (
+        <Loader buttonLoader />
+      ) : (
+        <>
+          {!!icon && <Icon classes={styles.buttonIcon} type={icon} />}
+          {children}
+        </>
+      )}
     </button>
   );
 };

@@ -5,6 +5,7 @@ import { ProfilePicture } from 'components/ProfilePicture';
 import { TextArea } from 'components/TextArea';
 import { useAuth } from 'providers/AuthProvider';
 import { ChangeEvent, useCallback, useState } from 'react';
+import styles from './Register.module.css';
 
 export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) => {
   const { user } = useAuth();
@@ -33,9 +34,11 @@ export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) 
       <ProfilePicture />
       <Input type="text" defaultValue={user?.authUser?.displayName || ''} label="Name" onChange={onUserNameChange} />
       <TextArea label="Bio" defaultValue={user?.bio || ''} onChange={onBioChange} />
-      <Button onClick={saveForm}>
-        <Icon type="arrowRight" />
-      </Button>
+      <div className={styles.buttonWrap}>
+        <Button onClick={saveForm}>
+          <Icon type="arrowRight" />
+        </Button>
+      </div>
     </>
   );
 };

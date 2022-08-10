@@ -1,4 +1,15 @@
-import React from 'react';
+import { useMemo } from 'react';
 import styles from './Loader.module.css';
 
-export const Loader = () => <div className={styles.loader}></div>;
+interface Properties {
+  buttonLoader?: boolean;
+}
+
+export const Loader = ({ buttonLoader }: Properties) => {
+  const classes = useMemo(
+    () => (buttonLoader ? `${styles.loader} ${styles.loaderInButton}` : styles.loader),
+    [buttonLoader]
+  );
+
+  return <div className={classes}></div>;
+};

@@ -43,7 +43,7 @@ const initialState = {
     // init
   },
   user: null,
-  loading: true,
+  loading: false,
   authErrors: null,
 };
 
@@ -64,14 +64,16 @@ export const AuthProvider = ({ children }: Properties) => {
         const newUser = new UserModel(authUser.uid, authUser);
         setUser(newUser);
         setLoading(false);
+        setAuthErrors(null);
         return;
       }
     });
 
     const initAuth = async () => {
       try {
-        setLoading(true);
+        setAuthErrors(null);
         const result = await getRedirectResult(auth);
+        setLoading(true);
         if (result) {
           // This is the signed-in user
           const authUser = result.user;
@@ -82,7 +84,7 @@ export const AuthProvider = ({ children }: Properties) => {
         }
       } catch (error) {
         if (error instanceof FirebaseError) {
-          setAuthErrors(getErrorMessage(error.code));
+          handleErrors(error);
         }
       } finally {
         setLoading(false);
@@ -93,6 +95,7 @@ export const AuthProvider = ({ children }: Properties) => {
   }, []);
 
   const login = async (email: string, password: string): Promise<void> => {
+    setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const newUser = new UserModel(userCredential.user.uid, userCredential.user);
@@ -100,31 +103,46 @@ export const AuthProvider = ({ children }: Properties) => {
       })
       .catch((error) => {
         if (error instanceof FirebaseError) {
-          setAuthErrors(getErrorMessage(error.code));
+          handleErrors(error);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   const signInWithGoogle = useCallback(async () => {
     try {
+      setLoading(true);
+      setAuthErrors(null);
       const provider = new GoogleAuthProvider();
       await signInWithRedirect(auth, provider);
     } catch (error) {
       if (error instanceof FirebaseError) {
-        setAuthErrors(getErrorMessage(error.code));
+        handleErrors(error);
       }
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const logout = useCallback(async () => {
-    setUser(null);
-    removeTokens();
-    await signOut(auth);
+    try {
+      await signOut(auth);
+      setUser(null);
+      removeTokens();
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        handleErrors(error);
+      }
+    }
   }, []);
 
   const createUser = useCallback(
     async ({ email, password }: { email: string; password: string }): Promise<UserModel | null> => {
       try {
+        setAuthErrors(null);
+        setLoading(true);
         const newUser = await createUserWithEmailAndPassword(auth, email, password);
         if (newUser) {
           await sendEmailVerification(newUser.user);
@@ -136,13 +154,23 @@ export const AuthProvider = ({ children }: Properties) => {
         return null;
       } catch (error) {
         if (error instanceof FirebaseError) {
-          setAuthErrors(getErrorMessage(error.code));
+          handleErrors(error);
         }
         return null;
+      } finally {
+        setLoading(false);
       }
     },
     []
   );
+
+  const handleErrors = (error: FirebaseError) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(error);
+    }
+
+    setAuthErrors(getErrorMessage(error.code));
+  };
 
   return (
     <AuthContext.Provider value={{ user, signInWithGoogle, createUser, logout, login, loading, authErrors }}>

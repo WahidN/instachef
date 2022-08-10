@@ -16,7 +16,7 @@ type Inputs = {
 };
 
 export const LoginForm = () => {
-  const { signInWithGoogle, login, authErrors } = useAuth();
+  const { signInWithGoogle, login, authErrors, loading } = useAuth();
   const { register, handleSubmit } = useForm<Inputs>();
 
   const loginWithGoogle = useCallback(async () => {
@@ -24,8 +24,12 @@ export const LoginForm = () => {
   }, [signInWithGoogle]);
 
   const loginNormal: SubmitHandler<Inputs> = useCallback(
-    (data: Inputs) => {
-      login(data.email, data.password);
+    async (data: Inputs) => {
+      try {
+        await login(data.email, data.password);
+      } catch (error) {
+        console.log(error);
+      }
     },
     [login]
   );
@@ -36,7 +40,7 @@ export const LoginForm = () => {
         <Logo />
       </div>
       <h1 className="textCenter">Log in</h1>
-      <Form buttonLabel="Log in" onSubmit={handleSubmit(loginNormal)} fieldErrors={authErrors}>
+      <Form buttonLabel="Log in" onSubmit={handleSubmit(loginNormal)} fieldErrors={authErrors} isLoading={loading}>
         <Input type="email" label="E-mail" required {...register('email')} />
         <Input type="password" label="Password" required {...register('password')} />
         <VerticalMargin size="small">

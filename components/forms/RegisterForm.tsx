@@ -16,7 +16,7 @@ interface IFormInputs {
 }
 
 export const RegisterForm = ({ onHandleStep }: Properties) => {
-  const { createUser, authErrors } = useAuth();
+  const { createUser, authErrors, loading } = useAuth();
 
   const {
     register,
@@ -42,7 +42,12 @@ export const RegisterForm = ({ onHandleStep }: Properties) => {
   return (
     <>
       <h1 className="textCenter">Register</h1>
-      <Form buttonLabel="Create an account" fieldErrors={authErrors} onSubmit={handleSubmit(createAccount)}>
+      <Form
+        buttonLabel="Create an account"
+        fieldErrors={authErrors}
+        onSubmit={handleSubmit(createAccount)}
+        isLoading={loading}
+      >
         <Input
           type="email"
           label="E-mail"
