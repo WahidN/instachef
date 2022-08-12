@@ -35,6 +35,7 @@ input.input:disabled {
   left: 1rem;
   line-height: 1.25;
   transition: all .2s;
+  pointer-events: none;
 }
 
 .required {
