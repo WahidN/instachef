@@ -6,3 +6,25 @@
   width: auto;
   margin-left: auto;
 }
+
+.successWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.successWrap h1 {
+  margin-bottom: 0;
+}
+
+.successWrap p {
+  margin-top: 0;
+}
+
+.successWrap button {
+  margin-top: 3rem;
+}
+
+.svgElement {
+  transform-origin: center;
+}

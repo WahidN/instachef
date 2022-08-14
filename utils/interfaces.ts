@@ -15,4 +15,5 @@ export interface IUser {
   following: string[];
   likedPosts: string[];
   favorites: string[];
+  email: string | null;
 }

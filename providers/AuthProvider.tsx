@@ -8,7 +8,7 @@ import {
   signInWithEmailAndPassword,
   signInWithRedirect,
   signOut,
-  User,
+  User
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { getErrorMessage } from 'helpers/errorCodes';
@@ -146,7 +146,7 @@ export const AuthProvider = ({ children }: Properties) => {
         const newUser = await createUserWithEmailAndPassword(auth, email, password);
         if (newUser) {
           await sendEmailVerification(newUser.user);
-          setUserInDB(newUser.user.uid);
+          setUserInDB(newUser.user);
           const user = new UserModel(newUser.user.uid, newUser.user);
           setUser(user);
           return user;
@@ -181,14 +181,15 @@ export const AuthProvider = ({ children }: Properties) => {
 
 export const useAuth = () => useContext(AuthContext);
 
-const setUserInDB = async (userId: string) => {
-  const userReference = doc(userCol, `${userId}`);
+const setUserInDB = async (user: User) => {
+  const userReference = doc(userCol, `${user.uid}`);
   await setDoc(userReference, {
-    id: userId,
+    id: user.uid,
     bio: '',
     followers: [],
     following: [],
     favorites: [],
     likedPosts: [],
+    email: user.email,
   });
 };

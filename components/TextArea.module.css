@@ -11,6 +11,7 @@
   box-shadow: 2px 0 8px 2px var(--color-shadow);
   font-size: 1rem;
   width: 100%;
+  font-family: inherit;
 }
 
 .label {

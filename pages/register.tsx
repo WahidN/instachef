@@ -6,7 +6,7 @@ import { RegisterForm } from '../components/forms/RegisterForm';
 import { RegisterProfile } from '../components/forms/RegisterProfile';
 
 const Register = () => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(2);
   const router = useRouter();
 
   const component = useMemo(() => {
