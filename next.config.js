@@ -8,5 +8,7 @@ module.exports = withPWA({
     register: true,
     skipWaiting: true,
   },
-  ignoreBuildErrors: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 });
