@@ -10,7 +10,7 @@ import {
   signOut,
   User
 } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, DocumentData, DocumentReference, getDoc, setDoc } from 'firebase/firestore';
 import { getErrorMessage } from 'helpers/errorCodes';
 import { userCol } from 'helpers/firestore';
 import { removeTokens, saveTokens } from 'helpers/tokens';
@@ -21,11 +21,13 @@ import { auth } from '../firebase.config';
 export interface AuthContextType {
   login: (email: string, password: string) => Promise<void>; //@TODO fix type
   signInWithGoogle: () => Promise<void> | undefined;
-  createUser: ({ email, password }: { email: string; password: string }) => Promise<UserModel | null> | undefined;
+  createUser: ({ email, password }: { email: string; password: string }) => Promise<User | null> | undefined;
   logout: () => void;
+  fillUser: (authUser: User) => void;
   authErrors: string | null;
   user?: UserModel | null;
   loading: boolean;
+  userReference: DocumentReference<DocumentData> | null;
 }
 
 const initialState = {
@@ -39,12 +41,14 @@ const initialState = {
     // init
   },
   createUser: async () => null,
+  fillUser: async () => null,
   updateProfile: async (user: User) => {
     // init
   },
   user: null,
   loading: false,
   authErrors: null,
+  userReference: null,
 };
 
 const AuthContext = createContext<AuthContextType>(initialState);
@@ -57,12 +61,41 @@ export const AuthProvider = ({ children }: Properties) => {
   const [user, setUser] = useState<UserModel | null>(initialState.user);
   const [loading, setLoading] = useState<boolean>(initialState.loading);
   const [authErrors, setAuthErrors] = useState<string | null>(initialState.authErrors);
+  const [userReference, setUserReference] = useState<DocumentReference | null>(initialState.userReference);
+
+  const setUserInDB = useCallback(async (authUser: User) => {
+    const uReference = doc(userCol, `${authUser.uid}`);
+    setUserReference(uReference);
+    await setDoc(uReference as DocumentReference, {
+      id: authUser.uid,
+      bio: '',
+      followers: [],
+      following: [],
+      favorites: [],
+      likedPosts: [],
+      email: authUser.email,
+    });
+  }, []);
+
+  const fillUser = useCallback(async (authUser: User) => {
+    const newUser = new UserModel(authUser.uid, authUser);
+    const documentReference = doc(userCol, `${authUser.uid}`);
+    const documentSnap = await getDoc(documentReference);
+    const userData = documentSnap.data();
+    newUser.fillProfile(
+      userData?.bio || '',
+      userData?.followers,
+      userData?.following,
+      userData?.likedPosts,
+      userData?.favorites
+    );
+    setUser(newUser);
+  }, []);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (authUser) => {
+    onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
-        const newUser = new UserModel(authUser.uid, authUser);
-        setUser(newUser);
+        await fillUser(authUser);
         setLoading(false);
         setAuthErrors(null);
         return;
@@ -80,7 +113,7 @@ export const AuthProvider = ({ children }: Properties) => {
           const credential = GoogleAuthProvider.credentialFromResult(result);
           const token = credential?.accessToken;
           saveTokens(token, null);
-          setUserInDB(authUser.uid);
+          setUserInDB(authUser);
         }
       } catch (error) {
         if (error instanceof FirebaseError) {
@@ -92,14 +125,13 @@ export const AuthProvider = ({ children }: Properties) => {
     };
 
     initAuth();
-  }, []);
+  }, [fillUser, setUserInDB]);
 
   const login = async (email: string, password: string): Promise<void> => {
     setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const newUser = new UserModel(userCredential.user.uid, userCredential.user);
-        setUser(newUser);
+      .then(async (userCredential) => {
+        await fillUser(userCredential.user);
       })
       .catch((error) => {
         if (error instanceof FirebaseError) {
@@ -139,17 +171,15 @@ export const AuthProvider = ({ children }: Properties) => {
   }, []);
 
   const createUser = useCallback(
-    async ({ email, password }: { email: string; password: string }): Promise<UserModel | null> => {
+    async ({ email, password }: { email: string; password: string }): Promise<User | null> => {
       try {
         setAuthErrors(null);
         setLoading(true);
         const newUser = await createUserWithEmailAndPassword(auth, email, password);
         if (newUser) {
-          await sendEmailVerification(newUser.user);
           setUserInDB(newUser.user);
-          const user = new UserModel(newUser.user.uid, newUser.user);
-          setUser(user);
-          return user;
+          await sendEmailVerification(newUser.user);
+          return newUser.user;
         }
         return null;
       } catch (error) {
@@ -161,7 +191,7 @@ export const AuthProvider = ({ children }: Properties) => {
         setLoading(false);
       }
     },
-    []
+    [setUserInDB]
   );
 
   const handleErrors = (error: FirebaseError) => {
@@ -173,23 +203,12 @@ export const AuthProvider = ({ children }: Properties) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, createUser, logout, login, loading, authErrors }}>
+    <AuthContext.Provider
+      value={{ user, signInWithGoogle, createUser, logout, login, loading, authErrors, userReference, fillUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
-
-const setUserInDB = async (user: User) => {
-  const userReference = doc(userCol, `${user.uid}`);
-  await setDoc(userReference, {
-    id: user.uid,
-    bio: '',
-    followers: [],
-    following: [],
-    favorites: [],
-    likedPosts: [],
-    email: user.email,
-  });
-};

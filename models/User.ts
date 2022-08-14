@@ -9,6 +9,7 @@ export class UserModel implements IUser {
   likedPosts: string[];
   favorites: string[];
   authUser: User;
+  email: string;
 
   constructor(id: string, authUser: User) {
     this.id = id;
@@ -18,10 +19,19 @@ export class UserModel implements IUser {
     this.likedPosts = [];
     this.favorites = [];
     this.authUser = authUser;
+    this.email = '';
   }
 
   getAuthUser() {
     return this.authUser;
+  }
+
+  fillProfile(bio: string, followers: [], following: [], likedPosts: [], favorites: []) {
+    this.bio = bio;
+    this.followers = followers;
+    this.following = following;
+    this.likedPosts = likedPosts;
+    this.favorites = favorites;
   }
 
   updateUserProfile(displayName: string, photoURL?: string) {

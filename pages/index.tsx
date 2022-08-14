@@ -15,6 +15,7 @@ const Home: NextPage = () => {
     >
       <Container>
         <h1>Hello {user?.authUser?.displayName}</h1>
+        <p>{user?.bio}</p>
         <Button onClick={logout}>Log out</Button>
       </Container>
     </Layout>

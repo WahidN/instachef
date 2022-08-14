@@ -3,12 +3,13 @@ import { Icon } from 'components/Icon';
 import { Input } from 'components/Input';
 import { ProfilePicture } from 'components/ProfilePicture';
 import { TextArea } from 'components/TextArea';
+import { DocumentReference, updateDoc } from 'firebase/firestore';
 import { useAuth } from 'providers/AuthProvider';
 import { ChangeEvent, useCallback, useState } from 'react';
 import styles from './Register.module.css';
 
 export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) => {
-  const { user } = useAuth();
+  const { user, userReference, fillUser } = useAuth();
   const [username, setUserName] = useState<string | null>(null);
   const [bio, setBio] = useState<string | null>(null);
 
@@ -20,14 +21,16 @@ export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) 
     setBio(event.target.value);
   }, []);
 
-  const saveForm = useCallback(() => {
-    if (!user) {
-      onHandleStep();
-      return;
+  const saveForm = useCallback(async () => {
+    user?.updateUserProfile(username || '');
+    await updateDoc(userReference as DocumentReference, {
+      bio: bio,
+    });
+    if (user) {
+      fillUser(user.authUser);
     }
-    user.updateUserProfile(username || '');
     onHandleStep();
-  }, [onHandleStep, user, username]);
+  }, [bio, fillUser, onHandleStep, user, userReference, username]);
 
   return (
     <>
