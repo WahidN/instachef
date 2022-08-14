@@ -22,7 +22,7 @@ export const RegisterForm = ({ onHandleStep }: Properties) => {
     register,
     handleSubmit,
     getValues,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<IFormInputs>();
 
   const createAccount: SubmitHandler<IFormInputs> = useCallback(
