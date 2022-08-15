@@ -11,20 +11,33 @@ interface Properties {
   secondary?: boolean;
   outline?: boolean;
   isLoading?: boolean;
+  isDisabled?: boolean;
 }
 
-export const Button = ({ children, onClick, outline, icon, secondary, type = 'button', isLoading }: Properties) => {
+export const Button = ({
+  children,
+  onClick,
+  outline,
+  icon,
+  secondary,
+  type = 'button',
+  isLoading,
+  isDisabled,
+}: Properties) => {
   const classStyles = useMemo(
     () =>
-      outline
+      isDisabled || isLoading
+        ? `${styles.button} ${styles.disabled}`
+        : outline
         ? `${styles.outline} ${styles.button}`
         : secondary
         ? `${styles.secondary} ${styles.button}`
         : `${styles.button} ${styles.primary}`,
-    [secondary, outline]
+    [isDisabled, isLoading, outline, secondary]
   );
+
   return (
-    <button type={type} className={classStyles} onClick={onClick}>
+    <button type={type} className={classStyles} onClick={onClick} disabled={isLoading || isDisabled}>
       {isLoading ? (
         <Loader buttonLoader />
       ) : (

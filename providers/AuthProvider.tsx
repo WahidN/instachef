@@ -93,6 +93,7 @@ export const AuthProvider = ({ children }: Properties) => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
         await fillUser(authUser);
@@ -106,7 +107,6 @@ export const AuthProvider = ({ children }: Properties) => {
       try {
         setAuthErrors(null);
         const result = await getRedirectResult(auth);
-        setLoading(true);
         if (result) {
           // This is the signed-in user
           const authUser = result.user;

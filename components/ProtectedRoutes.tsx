@@ -13,7 +13,7 @@ interface Properties {
 
 const ProtectedRoute = ({ children, router }: Properties): JSX.Element => {
   //Identify authenticated user
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const shouldShowLogin = useMemo(() => !user && !unprotectedRoutes.has(router.pathname), [router.pathname, user]);
 
   return shouldShowLogin ? <LoginForm /> : <>{children}</>;

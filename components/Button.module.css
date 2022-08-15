@@ -47,3 +47,7 @@
 .buttonIcon {
   margin-right: .5rem;
 }
+
+.disabled {
+  background: var(--color-grey);
+}
