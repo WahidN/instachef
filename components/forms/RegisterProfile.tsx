@@ -48,8 +48,12 @@ export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) 
 
       uploadTask.on(
         'state_changed',
-        (snapshot) => {},
-        (error) => {},
+        (snapshot) => {
+          console.log(snapshot);
+        },
+        (error) => {
+          console.error(error);
+        },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setImageUrl(downloadURL);

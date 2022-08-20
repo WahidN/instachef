@@ -1,8 +1,9 @@
 import Image from 'next/image';
+import { ChangeEventHandler } from 'react';
 import styles from './ProfilePicture.module.css';
 
 interface Properties {
-  onChange?: (event: Event) => void;
+  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
   imageUrl: string;
   alt?: string;
   hideInput?: boolean;
