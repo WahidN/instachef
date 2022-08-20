@@ -34,7 +34,7 @@ export class UserModel implements IUser {
     this.favorites = favorites;
   }
 
-  updateUserProfile(displayName: string, photoURL?: string) {
+  updateUserProfile(displayName?: string, photoURL?: string) {
     updateProfile(this.authUser, { displayName, photoURL });
   }
 }

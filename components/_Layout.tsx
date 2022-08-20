@@ -1,4 +1,5 @@
 import { Header } from 'components/headers/Header';
+import { Navigation } from 'components/Navigation';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import { IHeader } from 'utils/interfaces';
@@ -24,5 +25,6 @@ export const Layout = ({ children, title, description, headerOptions }: Properti
     </Head>
     <Header {...headerOptions} />
     <main>{children}</main>
+    <Navigation />
   </>
 );
