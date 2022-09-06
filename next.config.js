@@ -4,7 +4,7 @@ const withPWA = require('next-pwa');
 module.exports = withPWA({
   reactStrictMode: true,
   images: {
-    domains: ['firebasestorage.googleapis.com'],
+    domains: ['firebasestorage.googleapis.com', 'thispersondoesnotexist.com'],
   },
   pwa: {
     dest: 'public',

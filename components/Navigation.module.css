@@ -1,4 +1,23 @@
 .navigation {
   position: fixed;
   bottom: 0;
+  width: 100%;
+  background: var(--color-white);
+  box-shadow: 0 -1px 8px rgb(0 0 0 / 15%)
+}
+
+.navigation ul {
+  display: flex;
+  justify-content: space-evenly;
+  list-style: none;
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.navigation svg {
+  fill: var(--color-grey)
+}
+
+.active svg {
+  fill: var(--color-green);
 }

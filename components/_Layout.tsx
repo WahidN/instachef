@@ -3,6 +3,7 @@ import { Navigation } from 'components/Navigation';
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import { IHeader } from 'utils/interfaces';
+import styles from './_Layout.module.css';
 
 const defaults = {
   title: 'InstaChef | Online social platform for chefs',
@@ -24,7 +25,7 @@ export const Layout = ({ children, title, description, headerOptions }: Properti
       <meta name="description" content={description || defaults.description} />
     </Head>
     <Header {...headerOptions} />
-    <main>{children}</main>
+    <main className={styles.main}>{children}</main>
     <Navigation />
   </>
 );

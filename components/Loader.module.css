@@ -3,7 +3,7 @@
   height: 100px;
   border-radius: 50%;
   background: conic-gradient(#0000 15%, var(--color-green));
-  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 15px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 15px), #000 0);
   animation: spin .8s infinite linear;
 }
 
@@ -11,7 +11,7 @@
     background: conic-gradient(#0000 40%, var(--color-white));
     width: 30px;
     height: 30px;
-    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+    mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
 }
 
 @keyframes spin {
