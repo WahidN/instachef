@@ -35,14 +35,16 @@ interface Properties {
   classes?: string;
   width?: number;
   height?: number;
+  viewBoxWidth?: number;
+  viewBoxHeight?: number;
 }
 
-export const Icon = ({ type, classes, width = 24, height = 24 }: Properties) => (
+export const Icon = ({ type, classes, width, height, viewBoxWidth = width, viewBoxHeight = height }: Properties) => (
   <svg
     className={classes}
     width={width}
     height={height}
-    viewBox={`0 0 ${width} ${height}`}
+    viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
     xmlns="http://www.w3.org/2000/svg"
   >
     {icons[type]}

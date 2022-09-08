@@ -6,29 +6,45 @@ import styles from './Navigation.module.css';
 
 interface NavItem {
   link: string;
-  icon: IconType;
+  icon: {
+    type: IconType;
+    viewBoxWidth?: number;
+    viewBoxHeight?: number;
+  };
 }
 
 const NAV_ITEMS: NavItem[] = [
   {
     link: appRoutes.HOME,
-    icon: 'home',
+    icon: {
+      type: 'home',
+      viewBoxHeight: 25,
+      viewBoxWidth: 25,
+    },
   },
   {
     link: appRoutes.EXPLORE,
-    icon: 'search',
+    icon: {
+      type: 'search',
+    },
   },
   {
     link: appRoutes.ADD_RECIPE,
-    icon: 'plus',
+    icon: {
+      type: 'plus',
+    },
   },
   {
     link: appRoutes.FAVORITES,
-    icon: 'heart',
+    icon: {
+      type: 'heart',
+    },
   },
   {
     link: appRoutes.PROFILE,
-    icon: 'person',
+    icon: {
+      type: 'person',
+    },
   },
 ];
 
@@ -42,7 +58,13 @@ export const Navigation = () => {
           <li className={router.pathname == item.link ? styles.active : ''} key={item.link}>
             <Link href={item.link}>
               <a>
-                <Icon width={30} height={30} type={item.icon} />
+                <Icon
+                  width={30}
+                  height={30}
+                  viewBoxWidth={item.icon.viewBoxWidth}
+                  viewBoxHeight={item.icon.viewBoxHeight}
+                  type={item.icon.type}
+                />
               </a>
             </Link>
           </li>
