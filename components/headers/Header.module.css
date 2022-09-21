@@ -5,6 +5,8 @@
   position: sticky;
   top: 0;
   z-index: 999;
+  background: var(--color-green);
+  color: var(--color-white);
 }
 
 .headerInner {
@@ -15,20 +17,13 @@
   padding: 1rem;
 }
 
-.headerWhite {
-  background: white;
-}
-
 .title {
   font-weight: bold;
   text-align: center;
   flex: 4;
 }
 
-.buttonLeft {
+.buttonLeft, .buttonRight {
   flex: 1;
-}
-
-.buttonRight {
-  flex: 1;
+  fill: var(--color-white);
 }
