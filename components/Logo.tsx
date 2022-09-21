@@ -2,7 +2,7 @@ interface Properties {
   smallLogo?: boolean;
 }
 
-export default function Logo({ smallLogo }: Properties) {
+export const Logo = ({ smallLogo }: Properties) => {
   if (smallLogo) {
     return (
       <svg width="136" viewBox="0 0 136 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,4 +52,4 @@ export default function Logo({ smallLogo }: Properties) {
       </defs>
     </svg>
   );
-}
+};

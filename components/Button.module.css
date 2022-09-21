@@ -44,8 +44,19 @@
   color: var(--color-white);
 }
 
-.buttonIcon {
-  margin-right: .5rem;
+.isSimple {
+  background: transparent;
+  font-weight: 600;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.smallButton {
+  padding: 0.5rem 1rem;
+}
+
+.buttonIcon + * {
+  margin-left: .5rem;
 }
 
 .disabled {

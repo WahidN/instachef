@@ -7,8 +7,16 @@ const icons = {
   ),
   arrowRight: (
     <path
-      d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z"
-      fill="currentColor"
+      fillRule="evenodd"
+      d="M16.72 7.72a.75.75 0 011.06 0l3.75 3.75a.75.75 0 010 1.06l-3.75 3.75a.75.75 0 11-1.06-1.06l2.47-2.47H3a.75.75 0 010-1.5h16.19l-2.47-2.47a.75.75 0 010-1.06z"
+      clipRule="evenodd"
+    />
+  ),
+  arrowLeft: (
+    <path
+      fillRule="evenodd"
+      d="M7.28 7.72a.75.75 0 010 1.06l-2.47 2.47H21a.75.75 0 010 1.5H4.81l2.47 2.47a.75.75 0 11-1.06 1.06l-3.75-3.75a.75.75 0 010-1.06l3.75-3.75a.75.75 0 011.06 0z"
+      clipRule="evenodd"
     />
   ),
   home: (
@@ -39,7 +47,7 @@ interface Properties {
   viewBoxHeight?: number;
 }
 
-export const Icon = ({ type, classes, width, height, viewBoxWidth = width, viewBoxHeight = height }: Properties) => (
+export const Icon = ({ type, classes, width, height, viewBoxWidth = 30, viewBoxHeight = 30 }: Properties) => (
   <svg
     className={classes}
     width={width}

@@ -6,7 +6,7 @@
     "dev:next": "next dev -p 8000",
     "build": "next build",
     "start": "next start",
-    "dev:storybook": "start-storybook -p 6006",
+    "dev:storybook": "start-storybook --ci -p 6006",
     "dev": "run-p dev:next dev:storybook",
     "build-storybook": "build-storybook",
     "lint:eslint": "next lint",

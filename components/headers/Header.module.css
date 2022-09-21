@@ -21,4 +21,14 @@
 
 .title {
   font-weight: bold;
+  text-align: center;
+  flex: 4;
+}
+
+.buttonLeft {
+  flex: 1;
+}
+
+.buttonRight {
+  flex: 1;
 }

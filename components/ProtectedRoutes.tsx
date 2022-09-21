@@ -11,12 +11,10 @@ interface Properties {
   children?: ReactNode;
 }
 
-const ProtectedRoute = ({ children, router }: Properties): JSX.Element => {
+export const ProtectedRoute = ({ children, router }: Properties): JSX.Element => {
   //Identify authenticated user
   const { user } = useAuth();
   const shouldShowLogin = useMemo(() => !user && !unprotectedRoutes.has(router.pathname), [router.pathname, user]);
 
   return shouldShowLogin ? <LoginForm /> : <>{children}</>;
 };
-
-export default ProtectedRoute;

@@ -72,7 +72,7 @@ export const RegisterProfile = ({ onHandleStep }: { onHandleStep: () => void }) 
       <TextArea label="Bio" defaultValue={user?.bio || ''} onChange={onBioChange} />
       <div className={styles.buttonWrap}>
         <Button onClick={saveForm}>
-          <Icon type="arrowRight" />
+          <Icon width={30} height={30} viewBoxHeight={25} viewBoxWidth={25} type="arrowRight" />
         </Button>
       </div>
     </>

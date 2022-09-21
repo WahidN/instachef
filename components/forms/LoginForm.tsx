@@ -2,7 +2,7 @@ import { Button } from 'components/Button';
 import { Container } from 'components/Container';
 import { Form } from 'components/Form';
 import { Input } from 'components/Input';
-import Logo from 'components/Logo';
+import { Logo } from 'components/Logo';
 import { VerticalMargin } from 'components/VerticalMargin';
 import Link from 'next/link';
 import { useAuth } from 'providers/AuthProvider';
@@ -55,7 +55,7 @@ export const LoginForm = () => {
 
       <p className="textSmall">Or continue with:</p>
       <Button icon="google" onClick={loginWithGoogle} secondary>
-        Google
+        <span>Google</span>
       </Button>
     </Container>
   );
